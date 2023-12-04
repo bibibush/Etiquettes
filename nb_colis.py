@@ -58,6 +58,7 @@ def colis():
             nom = row.columns[2].value
             prenom = row.columns[3].value
             print(ls)
+
         for w in ws:
             if not w['B6'].value:
                 break
@@ -75,16 +76,24 @@ def colis():
                         prenom = None
                     if not nom:
                         break
-                    for dc in ls:
-                        if dc[2] == nom.upper() and dc[3] == prenom.capitalize():
-                            name_row.columns[2].value = dc[1]
-                            break
+                    for dc in ls[:]:
+                        if dc[2] == nom.upper() and not prenom is None:
+                            if dc[3] == prenom.capitalize():
+                                name_row.columns[2].value = dc[1]
+                                ls.remove(dc)
+                                break
+                        elif dc[2] == nom.upper() and prenom is None:
+                            if dc[3] == prenom:
+                                name_row.columns[2].value = dc[1]
+                                ls.remove(dc)
+                                break
+
         wb.save(os.path.join(dossier_isabelle, doc))
         wb.close()
     print('parfait !')
     pyautogui.alert("parfait !")
 
-def check_colis():
+def check_colis(event):
     if askyesno(title="confirmation", message="Vous voulez lancer le programme ?"):
         try:
             colis()
@@ -92,7 +101,7 @@ def check_colis():
             print(e)
             pyautogui.alert("Appelez Jin hyeong !")
 
-btn.bind('<Button-1>', check_colis())
+btn.bind('<Button-1>', check_colis)
 root.mainloop()
 
 
