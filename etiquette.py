@@ -39,7 +39,7 @@ def etiquetter():
         for w in ws:
             et_list = []
             for i in range(6, 105 + 1):
-                cli = w[f"B{i}:U{i}"]
+                cli = w[f"B{i}:S{i}"]
                 if not w[f"B{i}"].value:
                     break
                 def clier(index):
@@ -50,32 +50,30 @@ def etiquetter():
                 hm = clier(3)
                 hg = clier(4)
                 arti = clier(5)
-                ros_lyon = clier(6)
-                fromage = clier(7)
-                gibier = clier(8)
-                spe = clier(9)
-                mign = clier(10)
-                cuire = clier(11)
-                sabodet = clier(12)
-                truffe = clier(13)
-                barq = clier(14)
-                demi = clier(15)
-                jam_os = clier(16)
-                jam_6 = clier(17)
-                jam_9 = clier(18)
-                terrine = clier(19)
+                fromage = clier(6)
+                gibier = clier(7)
+                spe = clier(8)
+                mign = clier(9)
+                cuire = clier(10)
+                sabodet = clier(11)
+                barq = clier(12)
+                demi = clier(13)
+                jam_os = clier(14)
+                jam_6 = clier(15)
+                jam_9 = clier(16)
+                terrine = clier(17)
 
                 total = {
                     "HM": hm, "HG": hg, "ARTI": arti, "FROMAGE": fromage, "GIBIER": gibier,
                     "SPECIALITE": spe, "MIGNONETTE": mign, "Á CUIRE": cuire, "SABODET": sabodet, "BARQUETTE": barq,
                     "DEMI-JAMBON": demi, "JAMBON-OS": jam_os, "JAMBON-6M": jam_6, "JAMBON-9M": jam_9,
-                    "TERRINE": terrine, "ROSETTE": ros_lyon, "TRUFFE": truffe
+                    "TERRINE": terrine,
                 }
                 dict_vide = {}
 
                 lots = {"HM": total['HM'], "HG": total['HG'], "ARTI": total['ARTI'], "FROMAGE": total['FROMAGE'],
                         "GIBIER": total['GIBIER'], "SPECIALITE": total['SPECIALITE'],
-                        "Á CUIRE": total['Á CUIRE'], "SABODET": total['SABODET'], "TRUFFE": total['TRUFFE']}
+                        "Á CUIRE": total['Á CUIRE'], "SABODET": total['SABODET']}
 
                 lots_dic = {
                             "category": "lots", "count": sum(list(lots.values()))
@@ -121,7 +119,7 @@ def etiquetter():
                 def renew():
                     lots.update({"HM": total['HM'], "HG": total['HG'], "ARTI": total['ARTI'], "FROMAGE": total['FROMAGE'],
                         "GIBIER": total['GIBIER'], "SPECIALITE": total['SPECIALITE'],
-                        "Á CUIRE": total['Á CUIRE'], "SABODET": total['SABODET'], "TRUFFE": total['TRUFFE']})
+                        "Á CUIRE": total['Á CUIRE'], "SABODET": total['SABODET']})
                     jambon.update({"JAMBON-6M": total['JAMBON-6M'], "JAMBON-9M": total['JAMBON-9M']})
                     side.update({
                     "MIGNONETTE": total['MIGNONETTE'], "BARQUETTE": total['BARQUETTE'],
@@ -393,22 +391,6 @@ def etiquetter():
                         for key in jambon_vide:
                             total[key] -= jambon_vide[key]
                         renew()
-                    if total['ROSETTE'] >= 2:
-                        data = {
-                            "nom": cli.columns[0].value, "prenom": cli.columns[1].value,
-                            "nb_colis": 1, "ART": [("ROSETTE", 2)]
-                        }
-                        et_list.append(data)
-                        total['ROSETTE'] -= 2
-                        renew()
-                    if total['ROSETTE'] == 1:
-                        data = {
-                            "nom": cli.columns[0].value, "prenom": cli.columns[1].value,
-                            "nb_colis": 1, "ART": [("ROSETTE", 1)]
-                        }
-                        et_list.append(data)
-                        total['ROSETTE'] -= 1
-                        renew()
                     if lots_dic['count'] == 3 and total['TERRINE'] == 1:
                         v = 0
                         for key, value in lots.items():
@@ -455,7 +437,7 @@ def etiquetter():
 
                 while sum(list(total.values())) != 0:
                     run_func()
-                    if 0 < sum(list(total.values())) <= 4 and total['ROSETTE'] == 0 and total['JAMBON-OS'] == 0 and total['TERRINE'] <= 1 and jambon_dic['count'] <= 1:
+                    if 0 < sum(list(total.values())) <= 4 and total['JAMBON-OS'] == 0 and total['TERRINE'] <= 1 and jambon_dic['count'] <= 1:
                         if lots_dic['count'] + side_dic['count'] == 3 and total['TERRINE'] == 1:
                             dict_vide.update(lots)
                             dict_vide.update(side)
