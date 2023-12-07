@@ -21,7 +21,7 @@ btn.grid(row=2, column=2)
 entry.insert(0, "")
 
 def colis():
-    dossier_isabelle = '//srvlabreche\Dossier semaine commun\Doc. Isabelle\JIN'
+    dossier_isabelle = '//srvlabreche/Dossier semaine commun/EXPEDITIONS/Gestion CSE/Tableau pour Emballage + Récap Général Emballage'
     doc = f'{entry.get()}.xlsx'
     with xw.App(visible=False) as app:
         wb = xw.Book(os.path.join(dossier_isabelle, doc))
